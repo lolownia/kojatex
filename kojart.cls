@@ -16,34 +16,55 @@
 
 %  \AtEndOfClass{\RequirePackage[oxonia]{psgreek}}}
 
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+\newif\iflatextortf \latextortffalse
+\DeclareOption{latex2rtf}{\latextortftrue}
 
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
+
 
 \LoadClass{article}
 
 % ---- packages -----
+\RequirePackage{etoolbox}
 \RequirePackage{babel}
 \RequirePackage{fontspec}
 \RequirePackage{paralist}
 \RequirePackage{sectsty}
 \RequirePackage{luatexbase}
 
+\providebool{usejurabib}
+\iflatextortf
+ \boolfalse{usejurabib}
+\else
+  \booltrue{usejurabib}
+\fi
+
+
+\ifbool{usejurabib}{%
 % * Jurabib
 \RequirePackage{jurabib}
-% \jurabibsetup{
-%  	ibidem={strict,name},
-%  	titleformat={commasep,italic},
-%  	authorformat={abbrv,citationreversed},
-%  	}
-% \renewcommand*{\jbtitlefont}{\textit}
-% \renewcommand*{\jbapifont}{\textit}
-% \renewcommand{\bibbtsep}{w: }
-% \AddTo\bibsenglish{\def\trans{\ifjbweareinbib tłum.\else\ifjboxford
-%     tłum.\else\ifjbchicago tłum.\else Tłum.\fi\fi\fi}}
-% \AddTo\bibsenglish{\def\transby{}}
-% \AddTo\bibsenglish{\def\Volumename{Tom}}
-\bibliographystyle{jurabib}
+  \jurabibsetup{
+ 	ibidem={strict,name},
+ 	titleformat={commasep,italic},
+ 	authorformat={abbrv,citationreversed},
+ 	}
+  \renewcommand*{\jbtitlefont}{\textit}
+  \renewcommand*{\jbapifont}{\textit}
+  \renewcommand{\bibbtsep}{w: }
+
+  \AddTo\bibsenglish{\def\trans{\ifjbweareinbib tłum.\else\ifjboxford
+    tłum.\else\ifjbchicago tłum.\else Tłum.\fi\fi\fi}}
+  \AddTo\bibsenglish{\def\transby{}}
+  \AddTo\bibsenglish{\def\Volumename{Tom}}
+  \AddTo\bibsenglish{\def\editorsname{(red.)}}
+
+  \bibliographystyle{jurabib}
+  \newcommand{\cite}[2][]{\footcite[#1]{#2}}
+
+}{%
+  \bibliographystyle{plain}
+}
 
 %% \textwidth 6.1in
 %% \textheight 9in
