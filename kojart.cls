@@ -33,6 +33,8 @@
 \RequirePackage{sectsty}
 \RequirePackage{luatexbase}
 
+%% pass latextortf to higher level conditional system
+%% because normal \if* break down when nested.
 \providebool{usejurabib}
 \iflatextortf
  \boolfalse{usejurabib}
@@ -60,9 +62,9 @@
   \AddTo\bibsenglish{\def\editorsname{(red.)}}
 
   \bibliographystyle{jurabib}
-  \newcommand{\cite}[2][]{\footcite[#1]{#2}}
 
 }{%
+  \newcommand{\footcite}[2][]{\cite[#1]{#2}}
   \bibliographystyle{plain}
 }
 
